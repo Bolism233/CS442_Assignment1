@@ -38,4 +38,7 @@ class SampleComparable implements Comparable<SampleComparable> {
 		SampleComparable other = (SampleComparable) obj;
 		return id == other.id && Objects.equals(name, other.name);
 	}
+	public static void resetNEXT_ID () {
+		NEXT_ID = 0;
+	}
 }

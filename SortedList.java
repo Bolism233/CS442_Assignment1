@@ -27,8 +27,41 @@ public class SortedList<E extends Comparable<? super E>> {
 	}
 
 	int binarySearchHigh(List<E> list, E e) {
-		return 0;
-	}
+        int left = 0;
+        int right = list.size() - 1;
+        int insertIndex = list.size();
+
+        // Binary search for the lower bound
+        while (left <= right) {
+            int mid = (left + right) >>> 1;
+            E midVal = list.get(mid);
+            int cmp = midVal.compareTo(e);
+            if (cmp < 0) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+                insertIndex = mid;
+            }
+        }
+
+        // Check elements from insertIndex onwards for equals
+        int i = insertIndex;
+        while (i < list.size() && list.get(i).compareTo(e) == 0) {
+            if (list.get(i).equals(e)) {
+                // Find the upper bound (last occurrence of compareTo 0)
+                int j = i;
+                while (j < list.size() && list.get(j).compareTo(e) == 0) {
+                    j++;
+                }
+                return j;
+            }
+            i++;
+        }
+
+        // If no equals found, return negative insertion point
+        return -insertIndex - 1;
+    }
+
 	
 	int binarySearchLow(List<E> list, E e) {
 		return 0;

@@ -58,9 +58,35 @@ public class SortedList<E extends Comparable<? super E>> {
         return -insertIndex - 1;
     }
 
-	
 	int binarySearchLow(List<E> list, E e) {
-		return 0;
+		int left = 0;
+		int right = list.size() - 1;
+		// This will hold the candidate index for the first occurrence of e.
+		int lowerBound = list.size();
+
+		while (left <= right) {
+			// Compute mid using unsigned right shift to avoid overflow.
+			int mid = (left + right) >>> 1;
+			E midVal = list.get(mid);
+			int cmp = midVal.compareTo(e);
+
+			if (cmp < 0) {
+				// The target e is to the right of mid.
+				left = mid + 1;
+			} else {
+				// midVal is greater than or equal to e.
+				// Record mid as a potential lower bound and search further left.
+				lowerBound = mid;
+				right = mid - 1;
+			}
+		}
+
+		// If e is found, lowerBound will be the index of the first occurrence.
+		if (lowerBound < list.size() && list.get(lowerBound).compareTo(e) == 0) {
+			return lowerBound;
+		}
+		// If e is not present, left is the insertion point. Return as per contract.
+		return -left - 1;
 	}
 
 	/**
@@ -70,6 +96,8 @@ public class SortedList<E extends Comparable<? super E>> {
 	 * @param e element whose presence in this list is to be tested 
 	 * @return true when this list contains the specified element. 
 	 */
+
+	
 	public boolean contains(E e) {
 		return binarySearchHigh(internalList, e) >= 0;
 	}
